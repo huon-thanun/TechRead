@@ -4,23 +4,23 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
-    const stored = sessionStorage.getItem('user');
+    const stored = localStorage.getItem('user');
     return stored ? JSON.parse(stored) : null;
   });
 
   const login = useCallback((userData) => {
-    sessionStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
   }, []);
 
   const logout = useCallback(() => {
-    sessionStorage.removeItem('user');
-    sessionStorage.removeItem('bookmarks');
+    localStorage.removeItem('user');
+    localStorage.removeItem('bookmarks');
     setUser(null);
   }, []);
 
   const updateUser = useCallback((updatedUser) => {
-    sessionStorage.setItem('user', JSON.stringify(updatedUser));
+    localStorage.setItem('user', JSON.stringify(updatedUser));
     setUser(updatedUser);
   }, []);
 

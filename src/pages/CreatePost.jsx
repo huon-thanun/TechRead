@@ -10,8 +10,10 @@ import { useToast } from '../context/ToastContext';
 
 const CATEGORIES = [
   'Programming', 'WebDev', 'MobileDev', 'DSA', 'Database',
-  'AI', 'ML', 'DevOps', 'Cybersecurity', 'SoftwareEng', 'TechNews', 'CareerTips'
+  'AI', 'ML', 'DevOps', 'Cybersecurity', 'SoftwareEng', 'TechNews', 'CareerTips', 'Other'
 ];
+
+const emptyRef = () => ({ label: '', url: '' });
 
 export default function CreatePost() {
   const { user } = useAuth();
@@ -20,12 +22,12 @@ export default function CreatePost() {
   const navigate = useNavigate();
   const { modalProps, showAlert } = useModal();
 
-  const [form, setForm] = useState({ title: '', category: '', content: '', tags: '' });
+  const [form, setForm] = useState({ title: '', category: '', content: '' });
+  const [references, setReferences] = useState([emptyRef()]);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Redirect immediately if not logged in — no useEffect race condition
   if (!user) return <Navigate to="/login" replace />;
 
   const set = (field) => (e) => setForm(prev => ({ ...prev, [field]: e.target.value }));
@@ -39,14 +41,23 @@ export default function CreatePost() {
     reader.readAsDataURL(file);
   };
 
+  // Reference handlers
+  const setRef = (idx, field) => (e) => {
+    setReferences(prev => prev.map((r, i) => i === idx ? { ...r, [field]: e.target.value } : r));
+  };
+  const addRef = () => setReferences(prev => [...prev, emptyRef()]);
+  const removeRef = (idx) => setReferences(prev => prev.filter((_, i) => i !== idx));
+
   const publish = (imageUrl) => {
+    const validRefs = references.filter(r => r.label.trim() && r.url.trim());
     const post = {
       id: Date.now(),
       title: form.title.trim(),
       slug: form.title.trim().toLowerCase().replace(/\s+/g, '-'),
       content: form.content.trim(),
       category: form.category,
-      tags: form.tags.split(' ').filter(t => t.startsWith('#')),
+      references: validRefs,
+      tags: [],
       image: imageUrl,
       author: {
         name: user.name,
@@ -65,7 +76,6 @@ export default function CreatePost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!form.title.trim() || !form.category || !form.content.trim()) {
       await showAlert({
         title: 'Missing Fields',
@@ -74,19 +84,11 @@ export default function CreatePost() {
       });
       return;
     }
-
     setLoading(true);
-
     if (imageFile) {
       const reader = new FileReader();
-      reader.onload = () => {
-        publish(reader.result);
-        setLoading(false);
-      };
-      reader.onerror = () => {
-        showAlert({ title: 'Image Error', message: 'Failed to read image file.', type: 'danger' });
-        setLoading(false);
-      };
+      reader.onload = () => { publish(reader.result); setLoading(false); };
+      reader.onerror = () => { showAlert({ title: 'Image Error', message: 'Failed to read image file.', type: 'danger' }); setLoading(false); };
       reader.readAsDataURL(imageFile);
     } else {
       publish('https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=800');
@@ -116,22 +118,12 @@ export default function CreatePost() {
 
               <div>
                 <label className="form-label">Post Title *</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter post title"
-                  value={form.title}
-                  onChange={set('title')}
-                />
+                <input type="text" className="form-control" placeholder="Enter post title" value={form.title} onChange={set('title')} />
               </div>
 
               <div>
                 <label className="form-label">Category *</label>
-                <select
-                  className="form-select"
-                  value={form.category}
-                  onChange={set('category')}
-                >
+                <select className="form-select" value={form.category} onChange={set('category')}>
                   <option value="">-- Select Category --</option>
                   {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
@@ -139,18 +131,9 @@ export default function CreatePost() {
 
               <div>
                 <label className="form-label">Cover Image</label>
-                <input
-                  type="file"
-                  className="form-control"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
+                <input type="file" className="form-control" accept="image/*" onChange={handleImageChange} />
                 {imagePreview && (
-                  <img
-                    src={imagePreview}
-                    alt="preview"
-                    style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px', marginTop: '0.75rem', border: '1px solid var(--border)' }}
-                  />
+                  <img src={imagePreview} alt="preview" style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px', marginTop: '0.75rem', border: '1px solid var(--border)' }} />
                 )}
               </div>
 
@@ -166,35 +149,64 @@ export default function CreatePost() {
                 />
               </div>
 
+              {/* References */}
               <div>
-                <label className="form-label">Tags</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="#WebDev #JavaScript #React"
-                  value={form.tags}
-                  onChange={set('tags')}
-                />
-                <p style={{ fontSize: '0.775rem', color: '#9a9a9a', marginTop: '0.35rem' }}>
-                  Separate tags with space, each starting with #
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                  <label className="form-label" style={{ margin: 0 }}>
+                    <i className="bi bi-journals me-2" style={{ color: '#dc3545' }}></i>
+                    References
+                  </label>
+                  <button
+                    type="button"
+                    onClick={addRef}
+                    style={{ background: 'rgba(220,53,69,0.1)', border: '1px solid rgba(220,53,69,0.3)', color: '#dc3545', borderRadius: '6px', padding: '0.3rem 0.75rem', cursor: 'pointer', fontSize: '0.8rem', fontFamily: 'Syne, sans-serif', fontWeight: 600 }}
+                  >
+                    <i className="bi bi-plus me-1"></i>Add Reference
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                  {references.map((ref, idx) => (
+                    <div key={idx} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                      <span style={{ color: '#9a9a9a', fontSize: '0.8rem', minWidth: '20px', textAlign: 'center' }}>{idx + 1}.</span>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Label (e.g. MDN — CSS Guide)"
+                        value={ref.label}
+                        onChange={setRef(idx, 'label')}
+                        style={{ flex: 1 }}
+                      />
+                      <input
+                        type="url"
+                        className="form-control"
+                        placeholder="https://..."
+                        value={ref.url}
+                        onChange={setRef(idx, 'url')}
+                        style={{ flex: 1.5 }}
+                      />
+                      {references.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeRef(idx)}
+                          style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', padding: '0 0.25rem', fontSize: '1rem' }}
+                        >
+                          <i className="bi bi-x-lg"></i>
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <p style={{ fontSize: '0.775rem', color: '#9a9a9a', marginTop: '0.5rem' }}>
+                  Add relevant sources, docs, or articles readers can refer to
                 </p>
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '0.5rem' }}>
-                <button
-                  type="button"
-                  className="btn btn-outline-danger"
-                  style={{ borderRadius: '8px', padding: '0.65rem 1.5rem' }}
-                  onClick={() => navigate('/')}
-                >
+                <button type="button" className="btn btn-outline-danger" style={{ borderRadius: '8px', padding: '0.65rem 1.5rem' }} onClick={() => navigate('/')}>
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="btn btn-danger"
-                  style={{ borderRadius: '8px', padding: '0.65rem 2rem' }}
-                  disabled={loading}
-                >
+                <button type="submit" className="btn btn-danger" style={{ borderRadius: '8px', padding: '0.65rem 2rem' }} disabled={loading}>
                   {loading
                     ? <><span className="spinner-border spinner-border-sm me-2" role="status"></span>Publishing...</>
                     : <><i className="bi bi-send me-2"></i>Publish</>

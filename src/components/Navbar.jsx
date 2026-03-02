@@ -35,13 +35,13 @@ export default function Navbar({ onSearch }) {
       </div>
 
       {/* Marquee */}
-      <div style={{ flex: 1, maxWidth: '360px', overflow: 'hidden', margin: '0 1rem' }}>
+      {/* <div style={{ flex: 1, maxWidth: '360px', overflow: 'hidden', margin: '0 1rem' }}>
         <div className="marquee-wrap">
           <span className="marquee-inner">
             <strong style={{ color: '#dc3545' }}>TechRead</strong> — A social knowledge-sharing platform for CS learners and developers. Publish articles, explore tutorials, and discuss modern tech.
           </span>
         </div>
-      </div>
+      </div> */}
 
       {/* Right: Auth or User buttons */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
