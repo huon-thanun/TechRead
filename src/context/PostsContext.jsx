@@ -5,19 +5,19 @@ const PostsContext = createContext(null);
 
 export function PostsProvider({ children }) {
   const [userPosts, setUserPosts] = useState(() => {
-    const stored = sessionStorage.getItem('userPosts');
+    const stored = localStorage.getItem('userPosts');
     return stored ? JSON.parse(stored) : [];
   });
   const [bookmarks, setBookmarks] = useState(() => {
-    const stored = sessionStorage.getItem('bookmarks');
+    const stored = localStorage.getItem('bookmarks');
     return stored ? JSON.parse(stored) : {};
   });
   const [reactions, setReactions] = useState(() => {
-    const stored = sessionStorage.getItem('reactions');
+    const stored = localStorage.getItem('reactions');
     return stored ? JSON.parse(stored) : {};
   });
   const [reactionCounts, setReactionCounts] = useState(() => {
-    const stored = sessionStorage.getItem('reactionCounts');
+    const stored = localStorage.getItem('reactionCounts');
     return stored ? JSON.parse(stored) : {};
   });
 
@@ -42,7 +42,7 @@ export function PostsProvider({ children }) {
   const toggleBookmark = useCallback((postId) => {
     setBookmarks(prev => {
       const next = { ...prev, [postId]: !prev[postId] };
-      sessionStorage.setItem('bookmarks', JSON.stringify(next));
+      localStorage.setItem('bookmarks', JSON.stringify(next));
       return next;
     });
   }, []);
@@ -51,14 +51,14 @@ export function PostsProvider({ children }) {
     setReactions(prev => {
       const isReacted = prev[postId] || false;
       const next = { ...prev, [postId]: !isReacted };
-      sessionStorage.setItem('reactions', JSON.stringify(next));
+      localStorage.setItem('reactions', JSON.stringify(next));
 
       setReactionCounts(prevCounts => {
         const newCount = isReacted
           ? Math.max(0, currentCount - 1)
           : currentCount + 1;
         const nextCounts = { ...prevCounts, [postId]: newCount };
-        sessionStorage.setItem('reactionCounts', JSON.stringify(nextCounts));
+        localStorage.setItem('reactionCounts', JSON.stringify(nextCounts));
         return nextCounts;
       });
 
@@ -69,7 +69,7 @@ export function PostsProvider({ children }) {
   const createPost = useCallback((post) => {
     setUserPosts(prev => {
       const next = [post, ...prev];
-      sessionStorage.setItem('userPosts', JSON.stringify(next));
+      localStorage.setItem('userPosts', JSON.stringify(next));
       return next;
     });
   }, []);
@@ -77,7 +77,7 @@ export function PostsProvider({ children }) {
   const updatePost = useCallback((postId, updates) => {
     setUserPosts(prev => {
       const next = prev.map(p => p.id === postId ? { ...p, ...updates } : p);
-      sessionStorage.setItem('userPosts', JSON.stringify(next));
+      localStorage.setItem('userPosts', JSON.stringify(next));
       return next;
     });
   }, []);
@@ -85,7 +85,7 @@ export function PostsProvider({ children }) {
   const deletePost = useCallback((postId) => {
     setUserPosts(prev => {
       const next = prev.filter(p => p.id !== postId);
-      sessionStorage.setItem('userPosts', JSON.stringify(next));
+      localStorage.setItem('userPosts', JSON.stringify(next));
       return next;
     });
   }, []);
@@ -97,7 +97,7 @@ export function PostsProvider({ children }) {
           ? { ...p, author: { ...p.author, name: user.name, avatar: user.avatar } }
           : p
       );
-      sessionStorage.setItem('userPosts', JSON.stringify(next));
+      localStorage.setItem('userPosts', JSON.stringify(next));
       return next;
     });
   }, []);

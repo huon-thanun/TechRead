@@ -6,7 +6,7 @@ export default function Footer() {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '2.5rem' }}>
           {/* Brand */}
-          <div>
+          <div className='text-center'>
             <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '1.8rem', color: '#dc3545', letterSpacing: '-0.03em' }}>
               Tech<span style={{ color: '#f0ece8' }}>Read</span>
             </span>
@@ -16,7 +16,7 @@ export default function Footer() {
           </div>
 
           {/* About */}
-          <div>
+          <div className='text-center'>
             <h6 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, marginBottom: '1rem', color: '#f0ece8', textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: '0.8rem' }}>Platform</h6>
             <p className="foot-text">
               Users can publish articles, explore coding tutorials, and discuss modern tech topics. Admins manage content to ensure quality and a safe learning environment.
@@ -24,7 +24,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className='text-center'>
             <h6 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, marginBottom: '1rem', color: '#f0ece8', textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: '0.8rem' }}>Quick Links</h6>
             <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <li><Link to="/" className="foot-link"><i className="bi bi-house-fill me-2"></i>Home</Link></li>

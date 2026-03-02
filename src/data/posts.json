@@ -7,11 +7,13 @@
       "content": "Learn how to create responsive websites using modern HTML5 and CSS3 techniques including Flexbox and media queries. Responsive web design ensures your site looks great on all devices, from mobile phones to desktop computers. The key principles include fluid grids, flexible images, and CSS media queries. Flexbox is a powerful layout model that allows you to design complex layouts with ease. By using percentage-based widths and max-width properties, elements can resize themselves smoothly. Media queries allow you to apply different styles based on screen size, enabling truly adaptive experiences.",
       "category": "WebDev",
       "tags": ["#HTML", "#CSS", "#WebDev"],
+      "references": [
+        { "label": "MDN — Responsive Design", "url": "https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design" },
+        { "label": "CSS Tricks — Flexbox Guide", "url": "https://css-tricks.com/snippets/css/a-guide-to-flexbox/" },
+        { "label": "W3C — Media Queries", "url": "https://www.w3.org/TR/mediaqueries-4/" }
+      ],
       "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97",
-      "author": {
-        "name": "Huon Thanun",
-        "avatar": "https://ui-avatars.com/api/?name=Huon+Thanun&background=dc3545&color=fff"
-      },
+      "author": { "name": "Huon Thanun", "avatar": "https://ui-avatars.com/api/?name=Huon+Thanun&background=dc3545&color=fff" },
       "date": "2026-01-02",
       "likes": 124,
       "bookmarked": false,
@@ -24,11 +26,13 @@
       "content": "Flutter allows developers to build cross-platform mobile applications with a single codebase. Developed by Google, Flutter uses the Dart programming language and provides a rich set of pre-built widgets. The framework compiles to native ARM code for excellent performance on both iOS and Android. Flutter's hot reload feature dramatically speeds up development by allowing you to see changes instantly. The widget-based architecture makes building complex UIs straightforward and highly customizable.",
       "category": "MobileDev",
       "tags": ["#Flutter", "#MobileDev"],
+      "references": [
+        { "label": "Flutter Official Docs", "url": "https://docs.flutter.dev" },
+        { "label": "Dart Language Tour", "url": "https://dart.dev/language" },
+        { "label": "Flutter — Write your first app", "url": "https://docs.flutter.dev/get-started/codelab" }
+      ],
       "image": "https://images.unsplash.com/photo-1551650975-87deedd944c3",
-      "author": {
-        "name": "San Reaksmey",
-        "avatar": "https://ui-avatars.com/api/?name=San+Reaksmey&background=6c757d&color=fff"
-      },
+      "author": { "name": "San Reaksmey", "avatar": "https://randomuser.me/api/portraits/women/44.jpg" },
       "date": "2026-01-04",
       "likes": 89,
       "bookmarked": false,
@@ -41,11 +45,13 @@
       "content": "JavaScript powers the web from frontend to backend. This article explains why it remains dominant. JavaScript is the only language that runs natively in all web browsers, giving it an unparalleled reach. With Node.js, JavaScript has expanded to server-side development, enabling full-stack development with a single language. Modern JavaScript (ES6+) features like arrow functions, destructuring, and async/await have made the language much more pleasant to work with.",
       "category": "Programming",
       "tags": ["#JavaScript", "#Programming"],
+      "references": [
+        { "label": "MDN — JavaScript Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide" },
+        { "label": "ECMAScript 2024 Specification", "url": "https://tc39.es/ecma262/" },
+        { "label": "Node.js Official Docs", "url": "https://nodejs.org/en/docs" }
+      ],
       "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c",
-      "author": {
-        "name": "Chan Vannak",
-        "avatar": "https://randomuser.me/api/portraits/men/12.jpg"
-      },
+      "author": { "name": "Chan Vannak", "avatar": "https://randomuser.me/api/portraits/men/12.jpg" },
       "date": "2026-01-05",
       "likes": 143,
       "bookmarked": false,
@@ -58,11 +64,13 @@
       "content": "DSA is essential for problem-solving and technical interviews. Learn arrays, stacks, queues, and trees. Understanding data structures helps you choose the right tool for each problem, leading to efficient solutions. Arrays provide O(1) random access but O(n) insertion. Linked lists excel at insertions but have O(n) lookup. Trees and graphs model hierarchical and network relationships respectively. Practice platforms like LeetCode and HackerRank help you build these skills through repetition.",
       "category": "DSA",
       "tags": ["#DSA", "#Algorithms"],
+      "references": [
+        { "label": "Introduction to Algorithms — CLRS (MIT Press)", "url": "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/" },
+        { "label": "LeetCode — Practice DSA", "url": "https://leetcode.com" },
+        { "label": "Big-O Cheat Sheet", "url": "https://www.bigocheatsheet.com" }
+      ],
       "image": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4",
-      "author": {
-        "name": "Leakhena",
-        "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
-      },
+      "author": { "name": "Leakhena", "avatar": "https://randomuser.me/api/portraits/women/65.jpg" },
       "date": "2026-01-06",
       "likes": 201,
       "bookmarked": false,
@@ -75,11 +83,13 @@
       "content": "Database design plays a key role in system performance. Learn normalization and indexing strategies. A well-designed database schema reduces data redundancy and ensures data integrity. Normalization involves organizing data to eliminate redundancy through normal forms (1NF, 2NF, 3NF). Indexing dramatically speeds up query performance but adds overhead to write operations. Understanding query optimization and using EXPLAIN to analyze execution plans are crucial skills.",
       "category": "Database",
       "tags": ["#MySQL", "#Database"],
+      "references": [
+        { "label": "MySQL Official Documentation", "url": "https://dev.mysql.com/doc/" },
+        { "label": "Database Normalization — GeeksforGeeks", "url": "https://www.geeksforgeeks.org/database-normalization-normal-forms/" },
+        { "label": "Use The Index, Luke! — SQL Indexing", "url": "https://use-the-index-luke.com" }
+      ],
       "image": "https://images.unsplash.com/photo-1544383835-bda2bc66a55d",
-      "author": {
-        "name": "Meng Hour",
-        "avatar": "https://randomuser.me/api/portraits/men/77.jpg"
-      },
+      "author": { "name": "Meng Hour", "avatar": "https://randomuser.me/api/portraits/men/77.jpg" },
       "date": "2026-01-07",
       "likes": 156,
       "bookmarked": false,
@@ -92,11 +102,13 @@
       "content": "AI enables machines to mimic human intelligence. This article introduces core AI concepts. Artificial Intelligence encompasses machine learning, natural language processing, computer vision, and robotics. Machine learning algorithms learn patterns from data without being explicitly programmed. Neural networks, inspired by the human brain, form the basis of deep learning. Applications range from recommendation systems to autonomous vehicles.",
       "category": "AI",
       "tags": ["#AI", "#Future"],
+      "references": [
+        { "label": "Stanford CS221 — AI Course", "url": "https://cs221.stanford.edu" },
+        { "label": "Google AI Research", "url": "https://ai.google/research/" },
+        { "label": "Artificial Intelligence: A Modern Approach", "url": "https://aima.cs.berkeley.edu" }
+      ],
       "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995",
-      "author": {
-        "name": "Srey Pov",
-        "avatar": "https://randomuser.me/api/portraits/women/29.jpg"
-      },
+      "author": { "name": "Srey Pov", "avatar": "https://randomuser.me/api/portraits/women/29.jpg" },
       "date": "2026-01-08",
       "likes": 233,
       "bookmarked": false,
@@ -109,11 +121,13 @@
       "content": "Machine Learning allows systems to learn from data without being explicitly programmed. Supervised learning uses labeled training data to make predictions. Unsupervised learning discovers hidden patterns in unlabeled data. Reinforcement learning trains agents through rewards and penalties. Popular frameworks include TensorFlow and PyTorch. Feature engineering and data preprocessing are often more important than algorithm selection.",
       "category": "ML",
       "tags": ["#ML", "#AI"],
+      "references": [
+        { "label": "fast.ai — Practical Deep Learning", "url": "https://www.fast.ai" },
+        { "label": "TensorFlow Official Docs", "url": "https://www.tensorflow.org/learn" },
+        { "label": "Scikit-learn User Guide", "url": "https://scikit-learn.org/stable/user_guide.html" }
+      ],
       "image": "https://images.unsplash.com/photo-1555949963-aa79dcee981c",
-      "author": {
-        "name": "Rathana",
-        "avatar": "https://randomuser.me/api/portraits/men/88.jpg"
-      },
+      "author": { "name": "Rathana", "avatar": "https://randomuser.me/api/portraits/men/88.jpg" },
       "date": "2026-01-09",
       "likes": 190,
       "bookmarked": false,
@@ -126,11 +140,13 @@
       "content": "DevOps bridges development and operations using tools like Docker, CI/CD, and Kubernetes. Docker containers package applications with their dependencies for consistent environments. Kubernetes orchestrates containers at scale. CI/CD pipelines automate testing and deployment. Infrastructure as Code tools like Terraform enable version-controlled infrastructure. Monitoring with Prometheus and Grafana provides visibility into system health.",
       "category": "DevOps",
       "tags": ["#DevOps", "#CI_CD"],
+      "references": [
+        { "label": "Docker Official Docs", "url": "https://docs.docker.com" },
+        { "label": "Kubernetes Documentation", "url": "https://kubernetes.io/docs/home/" },
+        { "label": "GitHub Actions — CI/CD Guide", "url": "https://docs.github.com/en/actions" }
+      ],
       "image": "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9",
-      "author": {
-        "name": "Huon Thanun",
-        "avatar": "https://ui-avatars.com/api/?name=Huon+Thanun&background=dc3545&color=fff"
-      },
+      "author": { "name": "Huon Thanun", "avatar": "https://ui-avatars.com/api/?name=Huon+Thanun&background=dc3545&color=fff" },
       "date": "2026-01-10",
       "likes": 175,
       "bookmarked": false,
@@ -143,11 +159,13 @@
       "content": "Cybersecurity protects systems from digital attacks. Learn common threats and defenses. Phishing attacks trick users into revealing credentials. SQL injection exploits database vulnerabilities. Cross-site scripting (XSS) injects malicious scripts. Defense strategies include input validation, encryption, and least privilege principles. Regular security audits and penetration testing help identify vulnerabilities before attackers do.",
       "category": "Cybersecurity",
       "tags": ["#Security", "#Cybersecurity"],
+      "references": [
+        { "label": "OWASP Top 10 Vulnerabilities", "url": "https://owasp.org/www-project-top-ten/" },
+        { "label": "NIST Cybersecurity Framework", "url": "https://www.nist.gov/cyberframework" },
+        { "label": "Cybersecurity & Infrastructure Security Agency", "url": "https://www.cisa.gov/topics/cybersecurity-best-practices" }
+      ],
       "image": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b",
-      "author": {
-        "name": "Sokchea",
-        "avatar": "https://randomuser.me/api/portraits/men/54.jpg"
-      },
+      "author": { "name": "Sokchea", "avatar": "https://randomuser.me/api/portraits/men/54.jpg" },
       "date": "2026-01-11",
       "likes": 162,
       "bookmarked": false,
@@ -160,11 +178,13 @@
       "content": "Good software engineering ensures maintainability, scalability, and reliability. Clean code principles like meaningful naming, small functions, and DRY (Don't Repeat Yourself) improve readability. Design patterns provide reusable solutions to common problems. Test-driven development (TDD) ensures code correctness. Code reviews catch bugs and spread knowledge. Documentation helps future maintainers understand your intentions.",
       "category": "SoftwareEng",
       "tags": ["#SoftwareEngineering", "#CleanCode"],
+      "references": [
+        { "label": "Clean Code — Robert C. Martin", "url": "https://www.oreilly.com/library/view/clean-code-a/9780136083238/" },
+        { "label": "Refactoring Guru — Design Patterns", "url": "https://refactoring.guru/design-patterns" },
+        { "label": "Google Engineering Practices", "url": "https://google.github.io/eng-practices/" }
+      ],
       "image": "https://images.unsplash.com/photo-1581090700227-1e37b190418e",
-      "author": {
-        "name": "Dalin",
-        "avatar": "https://randomuser.me/api/portraits/women/41.jpg"
-      },
+      "author": { "name": "Dalin", "avatar": "https://randomuser.me/api/portraits/women/41.jpg" },
       "date": "2026-01-12",
       "likes": 144,
       "bookmarked": false,
@@ -177,11 +197,13 @@
       "content": "Discover the most important tech trends shaping the future this year. AI integration is accelerating across every industry. Quantum computing is moving from research to practical applications. Edge computing brings processing closer to data sources. Augmented and virtual reality are transforming entertainment and enterprise. Sustainable technology and green computing are becoming priorities as environmental concerns grow.",
       "category": "TechNews",
       "tags": ["#TechNews", "#Trends"],
+      "references": [
+        { "label": "Gartner Top Tech Trends 2026", "url": "https://www.gartner.com/en/information-technology/insights/top-technology-trends" },
+        { "label": "MIT Technology Review", "url": "https://www.technologyreview.com" },
+        { "label": "IEEE Spectrum — Technology News", "url": "https://spectrum.ieee.org" }
+      ],
       "image": "https://images.unsplash.com/photo-1518770660439-4636190af475",
-      "author": {
-        "name": "Vicheka",
-        "avatar": "https://randomuser.me/api/portraits/women/19.jpg"
-      },
+      "author": { "name": "Vicheka", "avatar": "https://randomuser.me/api/portraits/women/19.jpg" },
       "date": "2026-01-13",
       "likes": 210,
       "bookmarked": false,
@@ -194,11 +216,13 @@
       "content": "Learn how to build skills, portfolios, and confidence to succeed in a tech career. Start with fundamentals before jumping to frameworks. Build real projects that solve real problems. Contribute to open source to demonstrate your abilities. Network actively by attending meetups and conferences. Continuous learning is essential in tech - dedicate time each week to studying new technologies and concepts.",
       "category": "CareerTips",
       "tags": ["#Career", "#DeveloperLife"],
+      "references": [
+        { "label": "roadmap.sh — Developer Roadmaps", "url": "https://roadmap.sh" },
+        { "label": "GitHub — Open Source Guide", "url": "https://opensource.guide" },
+        { "label": "Stack Overflow Developer Survey 2025", "url": "https://survey.stackoverflow.co/2025" }
+      ],
       "image": "https://images.unsplash.com/photo-1506784983877-45594efa4cbe",
-      "author": {
-        "name": "Sopheak",
-        "avatar": "https://randomuser.me/api/portraits/men/63.jpg"
-      },
+      "author": { "name": "Sopheak", "avatar": "https://randomuser.me/api/portraits/men/63.jpg" },
       "date": "2026-01-14",
       "likes": 198,
       "bookmarked": false,

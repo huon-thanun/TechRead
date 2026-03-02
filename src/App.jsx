@@ -11,6 +11,7 @@ import Profile from './pages/Profile';
 import About from './pages/About';
 import Report from './pages/Report';
 import './assets/css/main.css';
+import UserProfile from './pages/Userprofile';
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
               <Route path="/blog/:slug" element={<BlogDetail />} />
               <Route path="/create-post" element={<CreatePost />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path='/user/:authorName' element={<UserProfile />} />
               <Route path="/about" element={<About />} />
               <Route path="/report" element={<Report />} />
             </Routes>
