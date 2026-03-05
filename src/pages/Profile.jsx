@@ -13,13 +13,21 @@ import { useToast } from '../context/ToastContext';
 const CATEGORIES = ['Programming','WebDev','MobileDev','DSA','Database','AI','ML','DevOps','Cybersecurity','SoftwareEng','TechNews','CareerTips'];
 const emptyRef = () => ({ label: '', url: '' });
 
+const TABS = [
+  { key: 'posts',     label: 'My Posts',   icon: 'bi-pencil-square' },
+  { key: 'bookmarks', label: 'Bookmarked', icon: 'bi-bookmark-heart-fill' },
+];
+
 export default function Profile() {
-  const { user, logout, updateUser }                                                                   = useAuth();
-  const { allPosts, userPosts, bookmarks, reactions, reactionCounts,
-          toggleBookmark, toggleReaction, updatePost, deletePost, updateUserPosts } = usePosts();
-  const { showToast }                                                                                  = useToast();
-  const navigate                                                                                       = useNavigate();
-  const { modalProps, showAlert, showConfirm }                                                         = useModal();
+  const { user, logout, updateUser }                                                        = useAuth();
+  const { allPosts, userPosts, bookmarks, reactionCounts,
+          updatePost, deletePost, updateUserPosts }                              = usePosts();
+  const { showToast }                                                                       = useToast();
+  const navigate                                                                            = useNavigate();
+  const { modalProps, showAlert, showConfirm }                                              = useModal();
+
+  // ── Active sidebar tab ──
+  const [activeTab, setActiveTab] = useState('posts');
 
   // ── Profile edit ──
   const [showEdit,      setShowEdit]      = useState(false);
@@ -28,9 +36,9 @@ export default function Profile() {
   const [avatarFile,    setAvatarFile]    = useState(null);
 
   // ── Edit post modal ──
-  const [editPostData, setEditPostData] = useState(null);
-  const [editPostForm, setEditPostForm] = useState({ title: '', category: '', content: '' });
-  const [editRefs,     setEditRefs]     = useState([emptyRef()]);
+  const [editPostData,  setEditPostData]  = useState(null);
+  const [editPostForm,  setEditPostForm]  = useState({ title: '', category: '', content: '' });
+  const [editRefs,      setEditRefs]      = useState([emptyRef()]);
   const [editImageFile, setEditImageFile] = useState(null);
 
   useEffect(() => { if (!user) navigate('/login'); }, [user]);
@@ -55,7 +63,7 @@ export default function Profile() {
     { label: 'Categories', value: [...new Set(myPosts.map(p => p.category))].length },
   ];
 
-  // ── Handlers: profile ──
+  // ── Profile handlers ──
   const handleShowEdit = () => {
     setEditForm({ name: user.name, email: user.email });
     setAvatarPreview(user.avatar || '');
@@ -64,9 +72,9 @@ export default function Profile() {
   const handleAvatarChange = (e) => {
     const file = e.target.files[0]; if (!file) return;
     setAvatarFile(file);
-    const reader = new FileReader();
-    reader.onload = () => setAvatarPreview(reader.result);
-    reader.readAsDataURL(file);
+    const r = new FileReader();
+    r.onload = () => setAvatarPreview(r.result);
+    r.readAsDataURL(file);
   };
   const handleSaveProfile = () => {
     if (!editForm.name || !editForm.email) {
@@ -85,7 +93,7 @@ export default function Profile() {
     if (yes) { logout(); navigate('/'); }
   };
 
-  // ── Handlers: post edit ──
+  // ── Post edit handlers ──
   const handleEditPost = (post) => {
     setEditPostData(post);
     setEditPostForm({ title: post.title, category: post.category, content: post.content });
@@ -117,7 +125,7 @@ export default function Profile() {
     if (yes) { deletePost(postId); showToast('Post deleted', 'danger'); }
   };
 
-  // ── Edit form JSX (passed to ProfileHeader) ──
+  // ── Edit form passed to ProfileHeader ──
   const editFormJSX = showEdit ? (
     <div style={{ display: 'grid', gap: '1rem' }}>
       <div>
@@ -146,11 +154,16 @@ export default function Profile() {
     </div>
   ) : null;
 
+  // ── Active posts list ──
+  const activePosts    = activeTab === 'posts' ? myPosts : bookmarkedPosts;
+  const isEmptyPosts   = activeTab === 'posts' && myPosts.length === 0;
+  const isEmptyBookmarks = activeTab === 'bookmarks' && bookmarkedPosts.length === 0;
+
   return (
     <>
       <Navbar />
       <main style={{ marginTop: '68px', minHeight: 'calc(100vh - 68px)', padding: '3rem 2rem' }}>
-        <div style={{ maxWidth: '860px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
           <ProfileHeader
             avatar={user.avatar}
@@ -171,48 +184,153 @@ export default function Profile() {
             editForm={editFormJSX}
           />
 
-          {/* ── My Posts ── */}
-          <section style={{ marginBottom: '2.5rem' }}>
-            <h5 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, marginBottom: '1.25rem', color: '#dc3545', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <i className="bi bi-pencil-square"></i> My Posts
-              <span style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 400, fontSize: '0.85rem', color: '#9a9a9a', marginLeft: '0.25rem' }}>({myPosts.length})</span>
-            </h5>
-            {myPosts.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '2.5rem', color: '#9a9a9a', border: '1px dashed rgba(220,53,69,0.25)', borderRadius: '12px' }}>
-                <i className="bi bi-journal-plus" style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem', color: '#dc3545', opacity: 0.5 }}></i>
-                <p style={{ margin: 0 }}>No posts yet. <Link to="/create-post" style={{ color: '#dc3545' }}>Create your first post</Link></p>
-              </div>
-            ) : (
-              myPosts.map(post => (
-                <PostCard key={post.id} post={post} showActions onEdit={handleEditPost} onDelete={handleDeletePost} />
-              ))
-            )}
-          </section>
+          {/* ── Two-column layout: sidebar + posts ── */}
+          <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: '1.5rem', alignItems: 'start' }}>
 
-          {/* ── Bookmarks ── */}
-          <section>
-            <h5 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, marginBottom: '1.25rem', color: '#dc3545', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <i className="bi bi-bookmark-heart-fill"></i> Bookmarked
-              <span style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 400, fontSize: '0.85rem', color: '#9a9a9a', marginLeft: '0.25rem' }}>({bookmarkedPosts.length})</span>
-            </h5>
-            {bookmarkedPosts.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '2.5rem', color: '#9a9a9a', border: '1px dashed rgba(220,53,69,0.25)', borderRadius: '12px' }}>
-                <i className="bi bi-bookmark" style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem', color: '#dc3545', opacity: 0.5 }}></i>
-                <p style={{ margin: 0 }}>No bookmarks yet. Start saving posts you like!</p>
+            {/* ── Sidebar ── */}
+            <aside style={{
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderRadius: '14px',
+              overflow: 'hidden',
+              position: 'sticky',
+              top: '88px',
+            }}>
+              <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)' }}>
+                <p style={{ margin: 0, fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: '#9a9a9a', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+                  Content
+                </p>
               </div>
-            ) : (
-              bookmarkedPosts.map(post => (
-                <PostCard key={post.id} post={post} />
-              ))
-            )}
-          </section>
+              <nav style={{ padding: '0.5rem' }}>
+                {TABS.map(tab => {
+                  const count = tab.key === 'posts' ? myPosts.length : bookmarkedPosts.length;
+                  const isActive = activeTab === tab.key;
+                  return (
+                    <button
+                      key={tab.key}
+                      onClick={() => setActiveTab(tab.key)}
+                      style={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '0.75rem',
+                        padding: '0.65rem 0.85rem',
+                        borderRadius: '8px',
+                        border: 'none',
+                        cursor: 'pointer',
+                        marginBottom: '0.2rem',
+                        fontFamily: 'Syne, sans-serif',
+                        fontWeight: isActive ? 700 : 500,
+                        fontSize: '0.9rem',
+                        background: isActive ? 'rgba(220,53,69,0.12)' : 'transparent',
+                        color: isActive ? '#dc3545' : '#9a9a9a',
+                        transition: 'all 0.18s',
+                        textAlign: 'left',
+                      }}
+                      onMouseOver={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}
+                      onMouseOut={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
+                    >
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                        <i className={`bi ${tab.icon}`} style={{ fontSize: '1rem' }}></i>
+                        {tab.label}
+                      </span>
+                      <span style={{
+                        background: isActive ? '#dc3545' : 'rgba(255,255,255,0.07)',
+                        color: isActive ? '#fff' : '#9a9a9a',
+                        borderRadius: '20px',
+                        padding: '1px 8px',
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
+                        minWidth: '22px',
+                        textAlign: 'center',
+                      }}>
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </nav>
 
+              {/* Quick action */}
+              <div style={{ padding: '0.75rem', borderTop: '1px solid var(--border)' }}>
+                <Link to="/create-post" style={{ textDecoration: 'none' }}>
+                  <button style={{
+                    width: '100%',
+                    background: 'linear-gradient(135deg, #dc3545, #a71d2a)',
+                    border: 'none',
+                    color: '#fff',
+                    borderRadius: '8px',
+                    padding: '0.6rem',
+                    cursor: 'pointer',
+                    fontFamily: 'Syne, sans-serif',
+                    fontWeight: 700,
+                    fontSize: '0.85rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.4rem',
+                    transition: 'opacity 0.2s',
+                  }}
+                    onMouseOver={e => e.currentTarget.style.opacity = '0.88'}
+                    onMouseOut={e => e.currentTarget.style.opacity = '1'}
+                  >
+                    <i className="bi bi-plus-lg"></i> New Post
+                  </button>
+                </Link>
+              </div>
+            </aside>
+
+            {/* ── Posts area ── */}
+            <div>
+              {/* Tab heading */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+                <h5 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#dc3545', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <i className={`bi ${TABS.find(t => t.key === activeTab)?.icon}`}></i>
+                  {TABS.find(t => t.key === activeTab)?.label}
+                  <span style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 400, fontSize: '0.85rem', color: '#9a9a9a' }}>
+                    ({activePosts.length})
+                  </span>
+                </h5>
+              </div>
+
+              {/* Empty states */}
+              {isEmptyPosts && (
+                <div style={{ textAlign: 'center', padding: '3rem 2rem', color: '#9a9a9a', border: '1px dashed rgba(220,53,69,0.25)', borderRadius: '12px' }}>
+                  <i className="bi bi-journal-plus" style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem', color: '#dc3545', opacity: 0.5 }}></i>
+                  <p style={{ margin: '0 0 1rem' }}>You haven't written any posts yet.</p>
+                  <Link to="/create-post">
+                    <button className="btn btn-danger" style={{ borderRadius: '8px' }}>
+                      <i className="bi bi-plus-lg me-2"></i>Create First Post
+                    </button>
+                  </Link>
+                </div>
+              )}
+              {isEmptyBookmarks && (
+                <div style={{ textAlign: 'center', padding: '3rem 2rem', color: '#9a9a9a', border: '1px dashed rgba(220,53,69,0.25)', borderRadius: '12px' }}>
+                  <i className="bi bi-bookmark" style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem', color: '#dc3545', opacity: 0.5 }}></i>
+                  <p style={{ margin: 0 }}>No bookmarks yet. Start saving posts you like!</p>
+                </div>
+              )}
+
+              {/* Post cards */}
+              {activePosts.map(post => (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  showActions={activeTab === 'posts'}
+                  onEdit={handleEditPost}
+                  onDelete={handleDeletePost}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </main>
 
       {/* ── Edit Post Modal ── */}
       {editPostData && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 9998, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', overflowY: 'auto' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 9998, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '16px', width: '100%', maxWidth: '700px', maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ background: 'linear-gradient(135deg, #dc3545, #a71d2a)', padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, zIndex: 1 }}>
               <h5 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, margin: 0, color: '#fff' }}>Edit Post</h5>
@@ -245,7 +363,7 @@ export default function Profile() {
                     <i className="bi bi-journals me-2" style={{ color: '#dc3545' }}></i>References
                   </label>
                   <button type="button" onClick={addEditRef} style={{ background: 'rgba(220,53,69,0.1)', border: '1px solid rgba(220,53,69,0.3)', color: '#dc3545', borderRadius: '6px', padding: '0.3rem 0.75rem', cursor: 'pointer', fontSize: '0.8rem', fontFamily: 'Syne, sans-serif', fontWeight: 600 }}>
-                    <i className="bi bi-plus me-1"></i>Add Reference
+                    <i className="bi bi-plus me-1"></i>Add
                   </button>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
