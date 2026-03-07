@@ -78,16 +78,16 @@ export default function ProfileHeader({ avatar, name, email, stats = [], onAvata
 
         {/* Name + email */}
         <div style={{ marginBottom: '1.25rem' }}>
-          <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, margin: '0 0 0.2rem', color: '#f0ece8', fontSize: '1.4rem' }}>
+          <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, margin: '0 0 0.2rem', color: 'var(--text)', fontSize: '1.4rem' }}>
             {name}
           </h3>
           {email && (
-            <p style={{ color: '#9a9a9a', margin: 0, fontSize: '0.875rem' }}>
+            <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '0.875rem' }}>
               <i className="bi bi-envelope me-2" style={{ color: '#dc3545' }}></i>{email}
             </p>
           )}
           {!email && (
-            <p style={{ color: '#9a9a9a', margin: 0, fontSize: '0.875rem' }}>
+            <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '0.875rem' }}>
               <i className="bi bi-person me-2" style={{ color: '#dc3545' }}></i>TechRead Author
             </p>
           )}
@@ -109,7 +109,7 @@ export default function ProfileHeader({ avatar, name, email, stats = [], onAvata
                 <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '1.3rem', color: '#dc3545', margin: 0, lineHeight: 1 }}>
                   {stat.value}
                 </p>
-                <p style={{ color: '#9a9a9a', fontSize: '0.72rem', margin: '0.2rem 0 0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.72rem', margin: '0.2rem 0 0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   {stat.label}
                 </p>
               </div>

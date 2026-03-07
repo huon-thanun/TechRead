@@ -64,9 +64,9 @@ export default function Home() {
 
         {/* Posts count info */}
         {filtered.length > 0 && (
-          <p style={{ color: '#9a9a9a', fontSize: '0.82rem', marginBottom: '1.25rem' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '1.25rem' }}>
             Showing{' '}
-            <span style={{ color: '#f0ece8', fontWeight: 600 }}>
+            <span style={{ color: 'var(--text)', fontWeight: 600 }}>
               {displayed.length}
             </span>
             {' '}of{' '}
@@ -77,7 +77,7 @@ export default function Home() {
 
         {/* Post list */}
         {displayed.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '4rem 2rem', color: '#9a9a9a' }}>
+          <div style={{ textAlign: 'center', padding: '4rem 2rem', color: 'var(--text-muted)' }}>
             <i className="bi bi-search" style={{ fontSize: '3rem', display: 'block', marginBottom: '1rem', color: '#dc3545' }}></i>
             <h4 style={{ fontFamily: 'Syne, sans-serif' }}>No posts found</h4>
             <p>Try a different search term or category</p>

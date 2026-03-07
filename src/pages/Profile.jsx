@@ -9,36 +9,37 @@ import useModal from '../hooks/useModal';
 import { useAuth } from '../context/AuthContext';
 import { usePosts } from '../context/PostsContext';
 import { useToast } from '../context/ToastContext';
+import { Input, Button, Select, Textarea } from '../components/Base';
 
-const CATEGORIES = ['Programming','WebDev','MobileDev','DSA','Database','AI','ML','DevOps','Cybersecurity','SoftwareEng','TechNews','CareerTips'];
+const CATEGORIES = ['Programming', 'WebDev', 'MobileDev', 'DSA', 'Database', 'AI', 'ML', 'DevOps', 'Cybersecurity', 'SoftwareEng', 'TechNews', 'CareerTips'];
 const emptyRef = () => ({ label: '', url: '' });
 
 const TABS = [
-  { key: 'posts',     label: 'My Posts',   icon: 'bi-pencil-square' },
+  { key: 'posts', label: 'My Posts', icon: 'bi-pencil-square' },
   { key: 'bookmarks', label: 'Bookmarked', icon: 'bi-bookmark-heart-fill' },
 ];
 
 export default function Profile() {
-  const { user, logout, updateUser }                                                        = useAuth();
+  const { user, logout, updateUser } = useAuth();
   const { allPosts, userPosts, bookmarks, reactionCounts,
-          updatePost, deletePost, updateUserPosts }                              = usePosts();
-  const { showToast }                                                                       = useToast();
-  const navigate                                                                            = useNavigate();
-  const { modalProps, showAlert, showConfirm }                                              = useModal();
+    updatePost, deletePost, updateUserPosts } = usePosts();
+  const { showToast } = useToast();
+  const navigate = useNavigate();
+  const { modalProps, showAlert, showConfirm } = useModal();
 
   // ── Active sidebar tab ──
   const [activeTab, setActiveTab] = useState('posts');
 
   // ── Profile edit ──
-  const [showEdit,      setShowEdit]      = useState(false);
-  const [editForm,      setEditForm]      = useState({ name: '', email: '' });
+  const [showEdit, setShowEdit] = useState(false);
+  const [editForm, setEditForm] = useState({ name: '', email: '' });
   const [avatarPreview, setAvatarPreview] = useState('');
-  const [avatarFile,    setAvatarFile]    = useState(null);
+  const [avatarFile, setAvatarFile] = useState(null);
 
   // ── Edit post modal ──
-  const [editPostData,  setEditPostData]  = useState(null);
-  const [editPostForm,  setEditPostForm]  = useState({ title: '', category: '', content: '' });
-  const [editRefs,      setEditRefs]      = useState([emptyRef()]);
+  const [editPostData, setEditPostData] = useState(null);
+  const [editPostForm, setEditPostForm] = useState({ title: '', category: '', content: '' });
+  const [editRefs, setEditRefs] = useState([emptyRef()]);
   const [editImageFile, setEditImageFile] = useState(null);
 
   useEffect(() => { if (!user) navigate('/login'); }, [user]);
@@ -57,9 +58,9 @@ export default function Profile() {
     sum + (reactionCounts[p.id] !== undefined ? reactionCounts[p.id] : (p.likes || 0)), 0);
 
   const stats = [
-    { label: 'Posts',      value: myPosts.length },
-    { label: 'Reactions',  value: totalReactions },
-    { label: 'Bookmarks',  value: bookmarkedPosts.length },
+    { label: 'Posts', value: myPosts.length },
+    { label: 'Reactions', value: totalReactions },
+    { label: 'Bookmarks', value: bookmarkedPosts.length },
     { label: 'Categories', value: [...new Set(myPosts.map(p => p.category))].length },
   ];
 
@@ -100,8 +101,8 @@ export default function Profile() {
     setEditRefs(post.references?.length ? post.references.map(r => ({ ...r })) : [emptyRef()]);
     setEditImageFile(null);
   };
-  const setEditRef    = (idx, field) => (e) => setEditRefs(prev => prev.map((r, i) => i === idx ? { ...r, [field]: e.target.value } : r));
-  const addEditRef    = () => setEditRefs(prev => [...prev, emptyRef()]);
+  const setEditRef = (idx, field) => (e) => setEditRefs(prev => prev.map((r, i) => i === idx ? { ...r, [field]: e.target.value } : r));
+  const addEditRef = () => setEditRefs(prev => [...prev, emptyRef()]);
   const removeEditRef = (idx) => setEditRefs(prev => prev.filter((_, i) => i !== idx));
 
   const handleSaveEditPost = async () => {
@@ -134,29 +135,40 @@ export default function Profile() {
         {avatarPreview && <img src={avatarPreview} alt="preview" style={{ width: '56px', height: '56px', borderRadius: '50%', marginTop: '0.5rem', objectFit: 'cover', border: '2px solid #dc3545' }} />}
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-        <div>
-          <label className="form-label">Username</label>
-          <input type="text" className="form-control" value={editForm.name} onChange={e => setEditForm(p => ({ ...p, name: e.target.value }))} />
-        </div>
-        <div>
-          <label className="form-label">Email</label>
-          <input type="email" className="form-control" value={editForm.email} onChange={e => setEditForm(p => ({ ...p, email: e.target.value }))} />
-        </div>
+        <Input
+          label="Username"
+          type="text"
+          value={editForm.name}
+          onChange={e => setEditForm(p => ({ ...p, name: e.target.value }))}
+        />
+        <Input
+          label="Email"
+          type="email"
+          value={editForm.email}
+          onChange={e => setEditForm(p => ({ ...p, email: e.target.value }))}
+        />
       </div>
       <div style={{ display: 'flex', gap: '0.75rem' }}>
-        <button className="btn btn-danger" style={{ borderRadius: '8px' }} onClick={handleSaveProfile}>
-          <i className="bi bi-check-circle me-2"></i>Save Changes
-        </button>
-        <button className="btn btn-outline-danger" style={{ borderRadius: '8px' }} onClick={() => setShowEdit(false)}>
-          <i className="bi bi-x-circle me-2"></i>Cancel
-        </button>
+        <Button
+          icon="bi bi-check-circle"
+          onClick={handleSaveProfile}
+        >
+          Save Changes
+        </Button>
+        <Button
+          variant="outline"
+          icon="bi bi-x-circle"
+          onClick={() => setShowEdit(false)}
+        >
+          Cancel
+        </Button>
       </div>
     </div>
   ) : null;
 
   // ── Active posts list ──
-  const activePosts    = activeTab === 'posts' ? myPosts : bookmarkedPosts;
-  const isEmptyPosts   = activeTab === 'posts' && myPosts.length === 0;
+  const activePosts = activeTab === 'posts' ? myPosts : bookmarkedPosts;
+  const isEmptyPosts = activeTab === 'posts' && myPosts.length === 0;
   const isEmptyBookmarks = activeTab === 'bookmarks' && bookmarkedPosts.length === 0;
 
   return (
@@ -173,12 +185,21 @@ export default function Profile() {
             onAvatarClick={handleShowEdit}
             actions={
               <>
-                <button className="btn btn-outline-danger" style={{ borderRadius: '8px', fontSize: '0.875rem' }} onClick={handleShowEdit}>
-                  <i className="bi bi-pencil me-2"></i>Edit Profile
-                </button>
-                <button className="btn btn-danger" style={{ borderRadius: '8px', fontSize: '0.875rem' }} onClick={handleLogout}>
-                  <i className="bi bi-box-arrow-right me-2"></i>Logout
-                </button>
+                <Button
+                  variant="outline"
+                  icon="bi bi-pencil"
+                  onClick={handleShowEdit}
+                  style={{ fontSize: '0.875rem' }}
+                >
+                  Edit Profile
+                </Button>
+                <Button
+                  icon="bi bi-box-arrow-right"
+                  onClick={handleLogout}
+                  style={{ fontSize: '0.875rem' }}
+                >
+                  Logout
+                </Button>
               </>
             }
             editForm={editFormJSX}
@@ -197,7 +218,7 @@ export default function Profile() {
               top: '88px',
             }}>
               <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)' }}>
-                <p style={{ margin: 0, fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: '#9a9a9a', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+                <p style={{ margin: 0, fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
                   Content
                 </p>
               </div>
@@ -224,7 +245,7 @@ export default function Profile() {
                         fontWeight: isActive ? 700 : 500,
                         fontSize: '0.9rem',
                         background: isActive ? 'rgba(220,53,69,0.12)' : 'transparent',
-                        color: isActive ? '#dc3545' : '#9a9a9a',
+                        color: isActive ? '#dc3545' : 'var(--text-muted)',
                         transition: 'all 0.18s',
                         textAlign: 'left',
                       }}
@@ -237,7 +258,7 @@ export default function Profile() {
                       </span>
                       <span style={{
                         background: isActive ? '#dc3545' : 'rgba(255,255,255,0.07)',
-                        color: isActive ? '#fff' : '#9a9a9a',
+                        color: isActive ? '#fff' : 'var(--text-muted)',
                         borderRadius: '20px',
                         padding: '1px 8px',
                         fontSize: '0.72rem',
@@ -288,7 +309,7 @@ export default function Profile() {
                 <h5 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#dc3545', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <i className={`bi ${TABS.find(t => t.key === activeTab)?.icon}`}></i>
                   {TABS.find(t => t.key === activeTab)?.label}
-                  <span style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 400, fontSize: '0.85rem', color: '#9a9a9a' }}>
+                  <span style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 400, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                     ({activePosts.length})
                   </span>
                 </h5>
@@ -296,7 +317,7 @@ export default function Profile() {
 
               {/* Empty states */}
               {isEmptyPosts && (
-                <div style={{ textAlign: 'center', padding: '3rem 2rem', color: '#9a9a9a', border: '1px dashed rgba(220,53,69,0.25)', borderRadius: '12px' }}>
+                <div style={{ textAlign: 'center', padding: '3rem 2rem', color: 'var(--text-muted)', border: '1px dashed rgba(220,53,69,0.25)', borderRadius: '12px' }}>
                   <i className="bi bi-journal-plus" style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem', color: '#dc3545', opacity: 0.5 }}></i>
                   <p style={{ margin: '0 0 1rem' }}>You haven't written any posts yet.</p>
                   <Link to="/create-post">
@@ -307,7 +328,7 @@ export default function Profile() {
                 </div>
               )}
               {isEmptyBookmarks && (
-                <div style={{ textAlign: 'center', padding: '3rem 2rem', color: '#9a9a9a', border: '1px dashed rgba(220,53,69,0.25)', borderRadius: '12px' }}>
+                <div style={{ textAlign: 'center', padding: '3rem 2rem', color: 'var(--text-muted)', border: '1px dashed rgba(220,53,69,0.25)', borderRadius: '12px' }}>
                   <i className="bi bi-bookmark" style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem', color: '#dc3545', opacity: 0.5 }}></i>
                   <p style={{ margin: 0 }}>No bookmarks yet. Start saving posts you like!</p>
                 </div>
@@ -369,7 +390,7 @@ export default function Profile() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                   {editRefs.map((ref, idx) => (
                     <div key={idx} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                      <span style={{ color: '#9a9a9a', fontSize: '0.8rem', minWidth: '20px', textAlign: 'center' }}>{idx + 1}.</span>
+                      <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', minWidth: '20px', textAlign: 'center' }}>{idx + 1}.</span>
                       <input type="text" className="form-control" placeholder="Label" value={ref.label} onChange={setEditRef(idx, 'label')} style={{ flex: 1 }} />
                       <input type="url" className="form-control" placeholder="https://..." value={ref.url} onChange={setEditRef(idx, 'url')} style={{ flex: 1.5 }} />
                       {editRefs.length > 1 && (

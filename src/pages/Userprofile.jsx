@@ -41,10 +41,10 @@ export default function UserProfile() {
     return (
       <>
         <Navbar />
-        <div style={{ marginTop: '68px', textAlign: 'center', padding: '6rem 2rem', color: '#9a9a9a' }}>
+        <div style={{ marginTop: '68px', textAlign: 'center', padding: '6rem 2rem', color: 'var(--text-muted)' }}>
           <i className="bi bi-person-x" style={{ fontSize: '4rem', display: 'block', marginBottom: '1rem', color: '#dc3545' }}></i>
           <h3 style={{ fontFamily: 'Syne, sans-serif' }}>User not found</h3>
-          <p>No posts found for <strong style={{ color: '#f0ece8' }}>{decodedName}</strong></p>
+          <p>No posts found for <strong style={{ color: 'var(--text)' }}>{decodedName}</strong></p>
           <button className="btn btn-danger" style={{ marginTop: '1.5rem', borderRadius: '8px' }} onClick={() => navigate('/')}>
             <i className="bi bi-arrow-left me-2"></i>Back to Home
           </button>
@@ -73,7 +73,7 @@ export default function UserProfile() {
           {/* Posts list */}
           <h5 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, marginBottom: '1.25rem', color: '#dc3545', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <i className="bi bi-grid"></i> Posts by {decodedName}
-            <span style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 400, fontSize: '0.85rem', color: '#9a9a9a', marginLeft: '0.25rem' }}>({authorPosts.length})</span>
+            <span style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 400, fontSize: '0.85rem', color: 'var(--text-muted)', marginLeft: '0.25rem' }}>({authorPosts.length})</span>
           </h5>
 
           {authorPosts.map(post => (

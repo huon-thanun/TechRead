@@ -7,6 +7,7 @@ import useModal from '../hooks/useModal';
 import { useAuth } from '../context/AuthContext';
 import { usePosts } from '../context/PostsContext';
 import { useToast } from '../context/ToastContext';
+import { Input, Button, Select, Textarea } from '../components/Base';
 
 const CATEGORIES = [
   'Programming', 'WebDev', 'MobileDev', 'DSA', 'Database',
@@ -106,7 +107,7 @@ export default function CreatePost() {
             <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '2rem', marginBottom: '0.25rem' }}>
               Create <span style={{ color: '#dc3545' }}>Post</span>
             </h1>
-            <p style={{ color: '#9a9a9a' }}>Share your Computer Science knowledge with the community</p>
+            <p style={{ color: 'var(--text-muted)' }}>Share your Computer Science knowledge with the community</p>
           </div>
 
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '16px', overflow: 'hidden' }}>
@@ -116,18 +117,21 @@ export default function CreatePost() {
 
             <form onSubmit={handleSubmit} noValidate style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
 
-              <div>
-                <label className="form-label">Post Title *</label>
-                <input type="text" className="form-control" placeholder="Enter post title" value={form.title} onChange={set('title')} />
-              </div>
+              <Input
+                label="Post Title *"
+                type="text"
+                placeholder="Enter post title"
+                value={form.title}
+                onChange={set('title')}
+              />
 
-              <div>
-                <label className="form-label">Category *</label>
-                <select className="form-select" value={form.category} onChange={set('category')}>
-                  <option value="">-- Select Category --</option>
-                  {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
-              </div>
+              <Select
+                label="Category *"
+                value={form.category}
+                onChange={set('category')}
+                options={CATEGORIES}
+                placeholder="-- Select Category --"
+              />
 
               <div>
                 <label className="form-label">Cover Image</label>
@@ -137,17 +141,13 @@ export default function CreatePost() {
                 )}
               </div>
 
-              <div>
-                <label className="form-label">Post Content *</label>
-                <textarea
-                  className="form-control"
-                  rows={10}
-                  placeholder="Write your article here..."
-                  value={form.content}
-                  onChange={set('content')}
-                  style={{ resize: 'vertical' }}
-                />
-              </div>
+              <Textarea
+                label="Post Content *"
+                rows={10}
+                placeholder="Write your article here..."
+                value={form.content}
+                onChange={set('content')}
+              />
 
               {/* References */}
               <div>
@@ -168,7 +168,7 @@ export default function CreatePost() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                   {references.map((ref, idx) => (
                     <div key={idx} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                      <span style={{ color: '#9a9a9a', fontSize: '0.8rem', minWidth: '20px', textAlign: 'center' }}>{idx + 1}.</span>
+                      <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', minWidth: '20px', textAlign: 'center' }}>{idx + 1}.</span>
                       <input
                         type="text"
                         className="form-control"
@@ -197,21 +197,30 @@ export default function CreatePost() {
                     </div>
                   ))}
                 </div>
-                <p style={{ fontSize: '0.775rem', color: '#9a9a9a', marginTop: '0.5rem' }}>
+                <p style={{ fontSize: '0.775rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
                   Add relevant sources, docs, or articles readers can refer to
                 </p>
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '0.5rem' }}>
-                <button type="button" className="btn btn-outline-danger" style={{ borderRadius: '8px', padding: '0.65rem 1.5rem' }} onClick={() => navigate('/')}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => navigate('/')}
+                  style={{ padding: '0.65rem 1.5rem' }}
+                >
                   Cancel
-                </button>
-                <button type="submit" className="btn btn-danger" style={{ borderRadius: '8px', padding: '0.65rem 2rem' }} disabled={loading}>
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  style={{ padding: '0.65rem 2rem' }}
+                >
                   {loading
                     ? <><span className="spinner-border spinner-border-sm me-2" role="status"></span>Publishing...</>
                     : <><i className="bi bi-send me-2"></i>Publish</>
                   }
-                </button>
+                </Button>
               </div>
 
             </form>
