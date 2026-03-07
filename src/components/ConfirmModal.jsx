@@ -100,13 +100,13 @@ export default function ConfirmModal({
                 fontFamily: 'Syne, sans-serif',
                 fontWeight: 700,
                 margin: '0 0 0.25rem',
-                color: '#f0ece8',
+                color: 'var(--text)',
                 fontSize: '1.05rem',
               }}>
                 {title}
               </h5>
               <p style={{
-                color: '#9a9a9a',
+                color: 'var(--text-muted)',
                 margin: 0,
                 fontSize: '0.9rem',
                 lineHeight: 1.6,
@@ -144,7 +144,7 @@ export default function ConfirmModal({
                 style={{
                   background: 'transparent',
                   border: '1px solid rgba(255,255,255,0.1)',
-                  color: '#9a9a9a',
+                  color: 'var(--text-muted)',
                   borderRadius: '8px',
                   padding: '0.55rem 1.25rem',
                   cursor: 'pointer',

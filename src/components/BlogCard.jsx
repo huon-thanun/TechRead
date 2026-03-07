@@ -75,8 +75,8 @@ const BlogCard = memo(function BlogCard({ post }) {
                   style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(220,53,69,0.4)' }}
                 />
                 <div>
-                  <p style={{ margin: 0, fontWeight: 600, fontSize: '0.875rem', color: '#f0ece8' }}>{post.author?.name}</p>
-                  <span style={{ fontSize: '0.72rem', color: '#9a9a9a' }}>{post.date}</span>
+                  <p style={{ margin: 0, fontWeight: 600, fontSize: '0.875rem', color: 'var(--text)' }}>{post.author?.name}</p>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{post.date}</span>
                 </div>
               </div>
               <span className="tag-badge" style={{ marginLeft: 'auto' }}>{post.category}</span>
@@ -84,10 +84,10 @@ const BlogCard = memo(function BlogCard({ post }) {
 
             {/* Title & excerpt */}
             <div style={{ flex: 1 }}>
-              <h4 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, marginBottom: '0.5rem', fontSize: '1.15rem', color: '#f0ece8' }}>
+              <h4 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, marginBottom: '0.5rem', fontSize: '1.15rem', color: 'var(--text)' }}>
                 {post.title}
               </h4>
-              <p style={{ color: '#9a9a9a', fontSize: '0.875rem', lineHeight: 1.6, margin: 0 }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.6, margin: 0 }}>
                 {post.content.slice(0, 160)}...
               </p>
             </div>
@@ -95,7 +95,7 @@ const BlogCard = memo(function BlogCard({ post }) {
             {/* Bottom row */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(220,53,69,0.15)' }}>
               {refCount > 0 ? (
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', color: '#9a9a9a', background: 'rgba(220,53,69,0.07)', border: '1px solid rgba(220,53,69,0.18)', borderRadius: '20px', padding: '3px 10px' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', color: 'var(--text-muted)', background: 'rgba(220,53,69,0.07)', border: '1px solid rgba(220,53,69,0.18)', borderRadius: '20px', padding: '3px 10px' }}>
                   <i className="bi bi-journals" style={{ color: '#dc3545', fontSize: '0.8rem' }}></i>
                   {refCount} reference{refCount > 1 ? 's' : ''}
                 </span>

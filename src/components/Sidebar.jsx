@@ -34,7 +34,7 @@ export default function Sidebar({ selectedCategory, onCategoryChange }) {
               key={cat}
               className="side-item"
               style={{
-                color: selectedCategory === cat ? '#f0ece8' : undefined,
+                color: selectedCategory === cat ? 'var(--text)' : undefined,
                 background: selectedCategory === cat ? 'rgba(220,53,69,0.15)' : undefined,
                 borderLeft: selectedCategory === cat ? '2px solid #dc3545' : '2px solid transparent',
               }}

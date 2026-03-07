@@ -25,7 +25,7 @@ export default function BlogDetail() {
     return (
       <>
         <Navbar />
-        <div style={{ marginTop: '68px', textAlign: 'center', padding: '6rem 2rem', color: '#9a9a9a' }}>
+        <div style={{ marginTop: '68px', textAlign: 'center', padding: '6rem 2rem', color: 'var(--text-muted)' }}>
           <i className="bi bi-file-earmark-x" style={{ fontSize: '4rem', display: 'block', marginBottom: '1rem', color: '#dc3545' }}></i>
           <h3 style={{ fontFamily: 'Syne, sans-serif' }}>Post not found</h3>
           <button className="btn btn-danger" style={{ marginTop: '1.5rem', borderRadius: '8px' }} onClick={() => navigate('/')}>
@@ -46,7 +46,7 @@ export default function BlogDetail() {
           <span className="tag-badge" style={{ marginBottom: '1rem', display: 'inline-block' }}>{post.category}</span>
 
           {/* Title */}
-          <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: 1.2, marginBottom: '1.5rem', color: '#f0ece8' }}>
+          <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: 1.2, marginBottom: '1.5rem', color: 'var(--text)' }}>
             {post.title}
           </h1>
 
@@ -63,8 +63,8 @@ export default function BlogDetail() {
               style={{ width: '46px', height: '46px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(220,53,69,0.5)', flexShrink: 0 }}
             />
             <div>
-              <p style={{ margin: 0, fontWeight: 700, color: '#f0ece8', fontFamily: 'Syne, sans-serif' }}>{post.author?.name}</p>
-              <span style={{ fontSize: '0.8rem', color: '#9a9a9a' }}>{post.date}</span>
+              <p style={{ margin: 0, fontWeight: 700, color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{post.author?.name}</p>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{post.date}</span>
             </div>
             <i className="bi bi-box-arrow-up-right" style={{ color: '#dc3545', fontSize: '0.8rem', marginLeft: 'auto', opacity: 0.6 }}></i>
           </div>
@@ -82,13 +82,13 @@ export default function BlogDetail() {
           {/* References */}
           {post.references && post.references.length > 0 && (
             <div style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid rgba(220,53,69,0.15)' }}>
-              <h5 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, marginBottom: '1.25rem', color: '#f0ece8', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <h5 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, marginBottom: '1.25rem', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <i className="bi bi-journals" style={{ color: '#dc3545' }}></i>
                 References
               </h5>
               <ol style={{ padding: '0 0 0 1.25rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                 {post.references.map((ref, idx) => (
-                  <li key={idx} style={{ color: '#9a9a9a', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                  <li key={idx} style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
                     <a
                       href={ref.url}
                       target="_blank"

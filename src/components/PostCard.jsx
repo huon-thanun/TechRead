@@ -73,14 +73,14 @@ const PostCard = memo(function PostCard({ post, showActions = false, onEdit, onD
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.6rem' }}>
                 <span className="tag-badge">{post.category}</span>
-                <span style={{ color: '#9a9a9a', fontSize: '0.75rem' }}>{post.date}</span>
+                <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{post.date}</span>
                 {showActions && (
                   <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.25rem' }} onClick={e => e.stopPropagation()}>
                     <button
                       onClick={() => onEdit?.(post)}
-                      style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: '#9a9a9a', borderRadius: '6px', padding: '3px 9px', cursor: 'pointer', fontSize: '0.8rem', transition: 'all 0.2s' }}
-                      onMouseOver={e => { e.currentTarget.style.color = '#f0ece8'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; }}
-                      onMouseOut={e => { e.currentTarget.style.color = '#9a9a9a'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                      style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'var(--text-muted)', borderRadius: '6px', padding: '3px 9px', cursor: 'pointer', fontSize: '0.8rem', transition: 'all 0.2s' }}
+                      onMouseOver={e => { e.currentTarget.style.color = 'var(--text)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; }}
+                      onMouseOut={e => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
                     >
                       <i className="bi bi-pencil me-1"></i>Edit
                     </button>
@@ -97,12 +97,12 @@ const PostCard = memo(function PostCard({ post, showActions = false, onEdit, onD
               </div>
 
               {/* Title */}
-              <h5 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#f0ece8', marginBottom: '0.4rem', fontSize: '1.05rem', lineHeight: 1.3 }}>
+              <h5 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', marginBottom: '0.4rem', fontSize: '1.05rem', lineHeight: 1.3 }}>
                 {post.title}
               </h5>
 
               {/* Excerpt */}
-              <p style={{ color: '#9a9a9a', fontSize: '0.85rem', lineHeight: 1.65, margin: 0 }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: 1.65, margin: 0 }}>
                 {post.content.slice(0, 140)}...
               </p>
             </div>
@@ -110,7 +110,7 @@ const PostCard = memo(function PostCard({ post, showActions = false, onEdit, onD
             {/* Bottom: references + reaction + bookmark */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(220,53,69,0.12)' }}>
               {refCount > 0 ? (
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: '#9a9a9a', background: 'rgba(220,53,69,0.07)', border: '1px solid rgba(220,53,69,0.18)', borderRadius: '20px', padding: '3px 10px' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: 'var(--text-muted)', background: 'rgba(220,53,69,0.07)', border: '1px solid rgba(220,53,69,0.18)', borderRadius: '20px', padding: '3px 10px' }}>
                   <i className="bi bi-journals" style={{ color: '#dc3545', fontSize: '0.75rem' }}></i>
                   {refCount} reference{refCount > 1 ? 's' : ''}
                 </span>
