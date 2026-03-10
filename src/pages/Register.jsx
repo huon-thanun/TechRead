@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Input, Button, Checkbox } from '../components/Base';
-import logoImage from '../assets/logo/logo.png';
+import logoImage from '../assets/images/logo/logo.png';
 
 export default function Register() {
   const { register } = useAuth();
