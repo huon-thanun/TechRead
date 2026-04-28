@@ -21,7 +21,7 @@ const TABS = [
 
 export default function Profile() {
   const { user, logout, updateUser } = useAuth();
-  const { allPosts, userPosts, bookmarks, reactionCounts,
+  const { allPosts, bookmarks,
     updatePost, deletePost, updateUserPosts } = usePosts();
   const { showToast } = useToast();
   const navigate = useNavigate();
@@ -46,16 +46,16 @@ export default function Profile() {
   if (!user) return null;
 
   // ── Derived ──
-  const myPosts = userPosts
+  const myPosts = allPosts
     .filter(p => p.author?.email === user.email)
-    .sort((a, b) => b.id - a.id);
+    .sort((a, b) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
 
   const bookmarkedPosts = allPosts
     .filter(p => bookmarks[p.id])
     .sort((a, b) => b.id - a.id);
 
   const totalReactions = myPosts.reduce((sum, p) =>
-    sum + (reactionCounts[p.id] !== undefined ? reactionCounts[p.id] : (p.likes || 0)), 0);
+    sum + (p.reactionCount ?? p.likes ?? 0), 0);
 
   const stats = [
     { label: 'Posts', value: myPosts.length },
@@ -77,21 +77,21 @@ export default function Profile() {
     r.onload = () => setAvatarPreview(r.result);
     r.readAsDataURL(file);
   };
-  const handleSaveProfile = () => {
+  const handleSaveProfile = async () => {
     if (!editForm.name || !editForm.email) {
       showAlert({ title: 'Missing Fields', message: 'Please fill in all fields.', type: 'warning' }); return;
     }
-    const save = (avatar) => {
-      const updated = { ...user, name: editForm.name, email: editForm.email, avatar: avatar || user.avatar };
-      updateUser(updated); updateUserPosts(updated);
-      setShowEdit(false); showToast('Profile updated!', 'success');
-    };
-    if (avatarFile) { const r = new FileReader(); r.onload = () => save(r.result); r.readAsDataURL(avatarFile); }
-    else save(null);
+    const result = await updateUser(editForm, avatarFile || null);
+    if (!result.ok) {
+      showAlert({ title: 'Update Failed', message: result.message, type: 'danger' });
+      return;
+    }
+    updateUserPosts(result.user);
+    setShowEdit(false); showToast('Profile updated!', 'success');
   };
   const handleLogout = async () => {
     const yes = await showConfirm({ title: 'Logout', message: 'Are you sure you want to logout?', type: 'warning', confirmText: 'Logout', cancelText: 'Stay' });
-    if (yes) { logout(); navigate('/'); }
+    if (yes) { await logout(); navigate('/'); }
   };
 
   // ── Post edit handlers ──

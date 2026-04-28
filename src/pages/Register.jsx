@@ -13,7 +13,7 @@ export default function Register() {
 
   const set = (field) => (e) => setForm(prev => ({ ...prev, [field]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     if (!form.name || !form.email || !form.password || !form.confirmPassword) {
@@ -26,7 +26,7 @@ export default function Register() {
       setError('You must accept the terms'); return;
     }
 
-    const result = register({
+    const result = await register({
       name: form.name,
       email: form.email,
       password: form.password,

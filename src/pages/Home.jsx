@@ -8,11 +8,11 @@ import { usePosts } from '../context/PostsContext';
 const POSTS_PER_PAGE = 10;
 
 export default function Home() {
-  const { allPosts } = usePosts();
+  const { allPosts, isLoadingPosts, isRefreshingPosts, postsError, refreshPosts } = usePosts();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [loadedCount, setLoadedCount] = useState(POSTS_PER_PAGE);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   // Reset to initial load whenever filter or search changes
   const handleCategoryChange = (cat) => {
@@ -46,10 +46,10 @@ export default function Home() {
   }, [filtered, loadedCount]);
 
   const loadMore = () => {
-    setIsLoading(true);
+    setIsLoadingMore(true);
     setTimeout(() => {
       setLoadedCount(prev => prev + POSTS_PER_PAGE);
-      setIsLoading(false);
+      setIsLoadingMore(false);
     }, 500);
   };
 
@@ -61,26 +61,41 @@ export default function Home() {
       <Sidebar selectedCategory={selectedCategory} onCategoryChange={handleCategoryChange} />
 
       <main className="blog-cards-section">
-
-        {/* Posts count info */}
-        {filtered.length > 0 && (
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '1.25rem' }}>
-            Showing{' '}
-            <span style={{ color: 'var(--text)', fontWeight: 600 }}>
-              {displayed.length}
-            </span>
-            {' '}of{' '}
-            <span style={{ color: '#dc3545', fontWeight: 600 }}>{filtered.length}</span>
-            {' '}posts
+        <div className="feed-toolbar">
+          <p className="feed-count-text">
+            {isLoadingPosts ? 'Loading your feed...' : `Showing ${displayed.length} of ${filtered.length} posts`}
           </p>
+
+          <button
+            type="button"
+            className="feed-refresh-btn"
+            onClick={() => refreshPosts({ silent: true })}
+            disabled={isRefreshingPosts}
+          >
+            <i className={`bi ${isRefreshingPosts ? 'bi-arrow-repeat spin' : 'bi-arrow-clockwise'}`}></i>
+            {isRefreshingPosts ? 'Refreshing...' : 'Refresh'}
+          </button>
+        </div>
+
+        {postsError && (
+          <div className="feed-alert" role="status">
+            <i className="bi bi-exclamation-triangle-fill"></i>
+            <span>{postsError}</span>
+            <button type="button" onClick={() => refreshPosts()} className="feed-alert-btn">Retry</button>
+          </div>
         )}
 
-        {/* Post list */}
-        {displayed.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '4rem 2rem', color: 'var(--text-muted)' }}>
-            <i className="bi bi-search" style={{ fontSize: '3rem', display: 'block', marginBottom: '1rem', color: '#dc3545' }}></i>
-            <h4 style={{ fontFamily: 'Syne, sans-serif' }}>No posts found</h4>
-            <p>Try a different search term or category</p>
+        {isLoadingPosts ? (
+          <div className="feed-skeleton-wrap">
+            {[1, 2, 3].map((key) => (
+              <div key={key} className="feed-skeleton-card" />
+            ))}
+          </div>
+        ) : displayed.length === 0 ? (
+          <div className="feed-empty-state">
+            <i className="bi bi-search"></i>
+            <h4>No posts found</h4>
+            <p>Try a different search term or category.</p>
           </div>
         ) : (
           displayed.map(post => (
@@ -88,56 +103,17 @@ export default function Home() {
           ))
         )}
 
-        {/* Load More Button */}
-        {hasMore && (
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2.5rem', marginBottom: '1rem' }}>
-            <button
-              onClick={loadMore}
-              disabled={isLoading}
-              style={{
-                background: isLoading ? '#555' : '#dc3545',
-                border: '1px solid #dc3545',
-                color: '#fff',
-                borderRadius: '8px',
-                padding: '0.6rem 1.5rem',
-                cursor: isLoading ? 'not-allowed' : 'pointer',
-                fontFamily: 'Syne, sans-serif',
-                fontWeight: 600,
-                fontSize: '0.9rem',
-                transition: 'all 0.2s',
-              }}
-            >
-              {isLoading ? (
-                <>
-                  <i className="bi bi-hourglass-split" style={{ marginRight: '0.5rem', animation: 'spin 1s linear infinite' }}></i>
-                  Loading...
-                </>
-              ) : (
-                <>
-                  <i className="bi bi-plus-circle" style={{ marginRight: '0.5rem' }}></i>
-                  Load More
-                </>
-              )}
+        {!isLoadingPosts && hasMore && (
+          <div className="feed-load-more-wrap">
+            <button onClick={loadMore} disabled={isLoadingMore} className="feed-load-more-btn">
+              <i className={`bi ${isLoadingMore ? 'bi-hourglass-split' : 'bi-plus-circle'}`}></i>
+              {isLoadingMore ? 'Loading...' : 'Load More'}
             </button>
           </div>
         )}
 
       </main>
 
-      {/* <div style={{ marginLeft: '240px' }}>
-        <Footer />
-      </div> */}
-
-      <style>{`
-        @keyframes spin {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
     </>
   );
 }

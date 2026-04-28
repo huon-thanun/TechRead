@@ -49,7 +49,7 @@ export default function CreatePost() {
   const addRef = () => setReferences(prev => [...prev, emptyRef()]);
   const removeRef = (idx) => setReferences(prev => prev.filter((_, i) => i !== idx));
 
-  const publish = (imageUrl) => {
+  const publish = async (imageUrl) => {
     const validRefs = references.filter(r => r.label.trim() && r.url.trim());
     const post = {
       id: Date.now(),
@@ -70,7 +70,7 @@ export default function CreatePost() {
       reacted: false,
       likes: 0,
     };
-    createPost(post);
+    await createPost(post);
     showToast('Post published successfully! 🎉', 'success');
     navigate('/');
   };
@@ -88,11 +88,11 @@ export default function CreatePost() {
     setLoading(true);
     if (imageFile) {
       const reader = new FileReader();
-      reader.onload = () => { publish(reader.result); setLoading(false); };
+      reader.onload = () => { publish(reader.result).finally(() => setLoading(false)); };
       reader.onerror = () => { showAlert({ title: 'Image Error', message: 'Failed to read image file.', type: 'danger' }); setLoading(false); };
       reader.readAsDataURL(imageFile);
     } else {
-      publish('https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=800');
+      await publish('https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=800');
       setLoading(false);
     }
   };

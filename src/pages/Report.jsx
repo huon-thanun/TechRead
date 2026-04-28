@@ -1,18 +1,28 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { usePosts } from '../context/PostsContext';
 
 export default function Report() {
   const [form, setForm] = useState({ name: '', email: '', type: '', description: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
+  const { submitReport } = usePosts();
 
   const set = (field) => (e) => setForm(prev => ({ ...prev, [field]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setForm({ name: '', email: '', type: '', description: '' });
-    setTimeout(() => setSubmitted(false), 5000);
+    setError('');
+
+    try {
+      await submitReport(form);
+      setSubmitted(true);
+      setForm({ name: '', email: '', type: '', description: '' });
+      setTimeout(() => setSubmitted(false), 5000);
+    } catch (reportError) {
+      setError(reportError.message || 'Failed to submit report');
+    }
   };
 
   return (
@@ -20,6 +30,12 @@ export default function Report() {
       <Navbar />
       <main className="report-section">
         <div style={{ maxWidth: '680px', margin: '0 auto', padding: '0 2rem', width: '100%' }}>
+          {error && (
+            <div style={{ background: 'rgba(220,53,69,0.15)', border: '1px solid rgba(220,53,69,0.4)', color: '#fecaca', borderRadius: '10px', padding: '1rem 1.25rem', marginBottom: '1.5rem' }}>
+              {error}
+            </div>
+          )}
+
           {submitted && (
             <div style={{ background: 'rgba(25,135,84,0.15)', border: '1px solid rgba(25,135,84,0.4)', color: '#6ee7b7', borderRadius: '10px', padding: '1rem 1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <i className="bi bi-check-circle-fill"></i>

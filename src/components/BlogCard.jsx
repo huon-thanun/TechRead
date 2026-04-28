@@ -49,71 +49,46 @@ const BlogCard = memo(function BlogCard({ post }) {
 
   return (
     <>
-      <div style={{ marginBottom: '1.5rem', cursor: 'pointer' }} onClick={() => navigate(`/blog/${post.slug}`)}>
-        <div className="blog-card" style={{ display: 'flex', flexDirection: 'row', borderRadius: '12px', overflow: 'hidden', minHeight: '200px' }}>
+      <article className="blog-card ig-card" onClick={() => navigate(`/blog/${post.slug}`)}>
+        <header className="ig-card-header">
+          <button type="button" className="ig-author" onClick={goToAuthor}>
+            <img
+              src={post.author?.avatar || DEFAULT_AVATAR}
+              alt={post.author?.name}
+              loading="lazy"
+              className="ig-author-avatar"
+            />
+            <span>
+              <strong className="ig-author-name">{post.author?.name}</strong>
+              <small className="ig-author-date">{post.date}</small>
+            </span>
+          </button>
+          <span className="tag-badge">{post.category}</span>
+        </header>
 
-          {/* Image */}
-          <div style={{ width: '260px', flexShrink: 0 }}>
-            <img src={post.image} alt={post.title} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          </div>
+        <div className="ig-cover-wrap">
+          <img src={post.image} alt={post.title} loading="lazy" className="ig-cover" />
+        </div>
 
-          {/* Content */}
-          <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div className="ig-card-body">
+          <h4 className="ig-title">{post.title}</h4>
+          <p className="ig-caption">{post.content.slice(0, 150)}...</p>
 
-            {/* Author row — clickable */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-              <div
-                onClick={goToAuthor}
-                style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', padding: '4px 8px', borderRadius: '20px', transition: 'background 0.2s' }}
-                onMouseOver={e => e.currentTarget.style.background = 'rgba(220,53,69,0.08)'}
-                onMouseOut={e => e.currentTarget.style.background = 'transparent'}
-              >
-                <img
-                  src={post.author?.avatar || DEFAULT_AVATAR}
-                  alt={post.author?.name}
-                  loading="lazy"
-                  style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(220,53,69,0.4)' }}
-                />
-                <div>
-                  <p style={{ margin: 0, fontWeight: 600, fontSize: '0.875rem', color: 'var(--text)' }}>{post.author?.name}</p>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{post.date}</span>
-                </div>
-              </div>
-              <span className="tag-badge" style={{ marginLeft: 'auto' }}>{post.category}</span>
-            </div>
-
-            {/* Title & excerpt */}
-            <div style={{ flex: 1 }}>
-              <h4 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, marginBottom: '0.5rem', fontSize: '1.15rem', color: 'var(--text)' }}>
-                {post.title}
-              </h4>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.6, margin: 0 }}>
-                {post.content.slice(0, 160)}...
-              </p>
-            </div>
-
-            {/* Bottom row */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(220,53,69,0.15)' }}>
-              {refCount > 0 ? (
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', color: 'var(--text-muted)', background: 'rgba(220,53,69,0.07)', border: '1px solid rgba(220,53,69,0.18)', borderRadius: '20px', padding: '3px 10px' }}>
-                  <i className="bi bi-journals" style={{ color: '#dc3545', fontSize: '0.8rem' }}></i>
-                  {refCount} reference{refCount > 1 ? 's' : ''}
-                </span>
-              ) : <span />}
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <i className={`bi ${post.reacted ? 'bi-emoji-heart-eyes-fill' : 'bi-emoji-heart-eyes'} action-icon`}
-                    style={{ fontSize: '1.3rem', color: '#dc3545' }} onClick={handleReaction}></i>
-                  <span style={{ color: '#dc3545', fontWeight: 700, fontSize: '0.875rem' }}>{post.reactionCount}</span>
-                </div>
-                <i className={`bi ${post.bookmarked ? 'bi-bookmark-fill' : 'bi-bookmark'} action-icon`}
-                  style={{ fontSize: '1.3rem', color: '#dc3545' }} onClick={handleBookmark}></i>
-              </div>
+          <div className="ig-actions" onClick={(e) => e.stopPropagation()}>
+            <button type="button" className="ig-action-btn" onClick={handleReaction}>
+              <i className={`bi ${post.reacted ? 'bi-heart-fill' : 'bi-heart'} action-icon`}></i>
+              <span>{post.reactionCount}</span>
+            </button>
+            <button type="button" className="ig-action-btn" onClick={handleBookmark}>
+              <i className={`bi ${post.bookmarked ? 'bi-bookmark-fill' : 'bi-bookmark'} action-icon`}></i>
+            </button>
+            <div className="ig-ref-count">
+              <i className="bi bi-journals"></i>
+              <span>{refCount} ref{refCount !== 1 ? 's' : ''}</span>
             </div>
           </div>
         </div>
-      </div>
+      </article>
 
       <ConfirmModal {...modalProps} />
     </>

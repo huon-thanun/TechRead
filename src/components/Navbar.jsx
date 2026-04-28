@@ -11,62 +11,46 @@ export default function Navbar({ onSearch }) {
   const navigate = useNavigate();
 
   return (
-    <div
-      className="navbar-header container-fluid px-4 position-fixed top-0 z-3"
-      style={{ height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-    >
-      {/* Logo + Search */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
-          <img src={logoImage} alt="TechRead" style={{ height: '36px', width: 'auto', display: 'block' }} />
+    <header className="navbar-header container-fluid px-3 px-md-4 position-fixed top-0 z-3">
+      <div className="navbar-left-cluster">
+        <Link to="/" className="navbar-brand-link">
+          <img src={logoImage} alt="TechRead" className="navbar-logo" />
         </Link>
 
-        <div style={{ position: 'relative', minWidth: '250px', borderRadius: '50px' }}>
-          <span className="search-icon" style={{ position: 'absolute', padding: '0.45rem 1rem', color: '#dc3545', background: 'transparent', display: 'flex', alignItems: 'center', borderRadius: '50px 0 0 50px' }}>
+        <div className="navbar-search-wrap">
+          <span className="search-icon navbar-search-icon">
             <i className="bi bi-search-heart"></i>
           </span>
           <input
-            className='search-input w-100'
+            className="search-input w-100"
             type="search"
-            placeholder="Search posts..."
+            placeholder={onSearch ? 'Search posts...' : 'Search unavailable on this page'}
             onChange={e => onSearch && onSearch(e.target.value)}
-            style={{ border: 'none', outline: 'none', padding: '0.45rem 0.75rem 0.45rem 2.5rem', background: 'transparent', borderRadius: '50px' }}
+            disabled={!onSearch}
           />
         </div>
       </div>
 
-      {/* Marquee */}
-      {/* <div style={{ flex: 1, maxWidth: '360px', overflow: 'hidden', margin: '0 1rem' }}>
-        <div className="marquee-wrap">
-          <span className="marquee-inner">
-            <strong style={{ color: '#dc3545' }}>TechRead</strong> — A social knowledge-sharing platform for CS learners and developers. Publish articles, explore tutorials, and discuss modern tech.
-          </span>
-        </div>
-      </div> */}
-
-      {/* Right: Auth or User buttons */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      <div className="navbar-right-cluster">
         <button
           type="button"
-          className="btn"
-          style={{ color: '#dc3545', padding: '0.25rem', border: 'none', background: 'transparent' }}
+          className="btn navbar-icon-btn"
           onClick={toggleTheme}
           aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
           title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
         >
-          <i className={`bi ${theme === 'dark' ? 'bi-sun-fill' : 'bi-moon-stars-fill'}`} style={{ fontSize: '1.2rem' }}></i>
+          <i className={`bi ${theme === 'dark' ? 'bi-sun-fill' : 'bi-moon-stars-fill'}`}></i>
         </button>
 
         {user ? (
           <>
-            <Link to="/create-post" className="btn btn-danger rounded-5" style={{ fontSize: '0.85rem' }}>
+            <Link to="/create-post" className="btn btn-danger rounded-5 navbar-create-btn">
               <i className="bi bi-pencil-square me-2"></i>Create post
             </Link>
 
             <button
-              className="btn p-0 border-0"
+              className="btn p-0 border-0 navbar-avatar-btn"
               onClick={() => navigate('/profile')}
-              style={{ background: 'transparent' }}
             >
               <img
                 src={user.avatar || DEFAULT_AVATAR}
@@ -78,15 +62,15 @@ export default function Navbar({ onSearch }) {
           </>
         ) : (
           <>
-            <Link to="/login" className="btn btn-outline-danger rounded-5" style={{ fontSize: '0.85rem' }}>
+            <Link to="/login" className="btn btn-outline-danger rounded-5 navbar-auth-btn">
               <i className="bi bi-box-arrow-in-right me-2"></i>Sign In
             </Link>
-            <Link to="/register" className="btn btn-danger rounded-5" style={{ fontSize: '0.85rem' }}>
+            <Link to="/register" className="btn btn-danger rounded-5 navbar-auth-btn">
               <i className="bi bi-person-plus me-2"></i>Sign Up
             </Link>
           </>
         )}
       </div>
-    </div>
+    </header>
   );
 }

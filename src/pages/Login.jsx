@@ -12,7 +12,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     if (!email || !password) {
@@ -20,7 +20,7 @@ export default function Login() {
       return;
     }
 
-    const result = login({ email, password });
+    const result = await login({ email, password });
     if (!result.ok) {
       setError(result.message);
       return;
