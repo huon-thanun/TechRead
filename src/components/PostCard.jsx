@@ -6,6 +6,8 @@ import { useToast } from '../context/ToastContext';
 import ConfirmModal from './ConfirmModal';
 import useModal from '../hooks/useModal';
 
+const DEFAULT_COVER = 'https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=1200';
+
 /**
  * PostCard — same visual style as BlogCard but used in Profile / UserProfile.
  * Supports optional edit/delete actions for the post owner.
@@ -17,18 +19,16 @@ import useModal from '../hooks/useModal';
  *  onDelete    — called with post.id when delete clicked
  */
 const PostCard = memo(function PostCard({ post, showActions = false, onEdit, onDelete }) {
-  const { user }    = useAuth();
-  const { toggleBookmark, toggleReaction, reactions, reactionCounts, bookmarks } = usePosts();
+  const { user } = useAuth();
+  const { toggleBookmark, toggleReaction, bookmarks } = usePosts();
   const { showToast } = useToast();
   const { modalProps, showConfirm } = useModal();
-  const navigate    = useNavigate();
+  const navigate = useNavigate();
 
-  const isReacted    = reactions[post.id]       || false;
-  const isBookmarked = bookmarks[post.id]        || false;
-  const liveCount    = reactionCounts[post.id]  !== undefined
-    ? reactionCounts[post.id]
-    : (post.likes || 0);
-  const refCount     = post.references?.length  || 0;
+  const isReacted = post.reacted || false;
+  const isBookmarked = bookmarks[post.id] || false;
+  const liveCount = post.reactionCount ?? post.likes ?? 0;
+  const refCount = post.references?.length || 0;
 
   const handleReact = async (e) => {
     e.stopPropagation();
@@ -53,88 +53,46 @@ const PostCard = memo(function PostCard({ post, showActions = false, onEdit, onD
 
   return (
     <>
-      <div style={{ marginBottom: '1.5rem', cursor: 'pointer' }} onClick={() => navigate(`/blog/${post.slug}`)}>
-        <div className="blog-card" style={{ display: 'flex', flexDirection: 'row', borderRadius: '12px', overflow: 'hidden', minHeight: '180px' }}>
+      <article className="blog-card ig-card ig-card-compact" onClick={() => navigate(`/blog/${post.slug}`)}>
+        <div className="ig-cover-wrap ig-cover-wrap-compact">
+          <img src={post.image || DEFAULT_COVER} alt={post.title} loading="lazy" className="ig-cover" />
+        </div>
 
-          {/* Cover image */}
-          <div style={{ width: '240px', flexShrink: 0 }}>
-            <img
-              src={post.image}
-              alt={post.title}
-              loading="lazy"
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
+        <div className="ig-card-body">
+          <div className="ig-meta-row" onClick={(e) => e.stopPropagation()}>
+            <span className="tag-badge">{post.category}</span>
+            <span className="ig-date-mini">{post.date}</span>
+
+            {showActions && (
+              <div className="post-owner-actions">
+                <button type="button" className="post-action post-action-edit" onClick={() => onEdit?.(post)}>
+                  <i className="bi bi-pencil me-1"></i>Edit
+                </button>
+                <button type="button" className="post-action post-action-delete" onClick={() => onDelete?.(post.id)}>
+                  <i className="bi bi-trash me-1"></i>Delete
+                </button>
+              </div>
+            )}
           </div>
 
-          {/* Content */}
-          <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <h5 className="ig-title ig-title-sm">{post.title}</h5>
+          <p className="ig-caption">{post.content.slice(0, 130)}...</p>
 
-            {/* Top: category + date + edit/delete */}
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.6rem' }}>
-                <span className="tag-badge">{post.category}</span>
-                <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{post.date}</span>
-                {showActions && (
-                  <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.25rem' }} onClick={e => e.stopPropagation()}>
-                    <button
-                      onClick={() => onEdit?.(post)}
-                      style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'var(--text-muted)', borderRadius: '6px', padding: '3px 9px', cursor: 'pointer', fontSize: '0.8rem', transition: 'all 0.2s' }}
-                      onMouseOver={e => { e.currentTarget.style.color = 'var(--text)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; }}
-                      onMouseOut={e => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
-                    >
-                      <i className="bi bi-pencil me-1"></i>Edit
-                    </button>
-                    <button
-                      onClick={() => onDelete?.(post.id)}
-                      style={{ background: 'rgba(220,53,69,0.08)', border: '1px solid rgba(220,53,69,0.2)', color: '#dc3545', borderRadius: '6px', padding: '3px 9px', cursor: 'pointer', fontSize: '0.8rem', transition: 'all 0.2s' }}
-                      onMouseOver={e => { e.currentTarget.style.background = 'rgba(220,53,69,0.18)'; }}
-                      onMouseOut={e => { e.currentTarget.style.background = 'rgba(220,53,69,0.08)'; }}
-                    >
-                      <i className="bi bi-trash me-1"></i>Delete
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Title */}
-              <h5 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', marginBottom: '0.4rem', fontSize: '1.05rem', lineHeight: 1.3 }}>
-                {post.title}
-              </h5>
-
-              {/* Excerpt */}
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: 1.65, margin: 0 }}>
-                {post.content.slice(0, 140)}...
-              </p>
-            </div>
-
-            {/* Bottom: references + reaction + bookmark */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(220,53,69,0.12)' }}>
-              {refCount > 0 ? (
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: 'var(--text-muted)', background: 'rgba(220,53,69,0.07)', border: '1px solid rgba(220,53,69,0.18)', borderRadius: '20px', padding: '3px 10px' }}>
-                  <i className="bi bi-journals" style={{ color: '#dc3545', fontSize: '0.75rem' }}></i>
-                  {refCount} reference{refCount > 1 ? 's' : ''}
-                </span>
-              ) : <span />}
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <i
-                    className={`bi ${isReacted ? 'bi-emoji-heart-eyes-fill' : 'bi-emoji-heart-eyes'} action-icon`}
-                    style={{ fontSize: '1.25rem', color: '#dc3545' }}
-                    onClick={handleReact}
-                  ></i>
-                  <span style={{ color: '#dc3545', fontWeight: 700, fontSize: '0.85rem' }}>{liveCount}</span>
-                </div>
-                <i
-                  className={`bi ${isBookmarked ? 'bi-bookmark-fill' : 'bi-bookmark'} action-icon`}
-                  style={{ fontSize: '1.25rem', color: '#dc3545' }}
-                  onClick={handleBookmark}
-                ></i>
-              </div>
+          <div className="ig-actions" onClick={(e) => e.stopPropagation()}>
+            <button type="button" className="ig-action-btn" onClick={handleReact}>
+              <i className={`bi ${isReacted ? 'bi-heart-fill' : 'bi-heart'} action-icon`}></i>
+              <span>{liveCount}</span>
+            </button>
+            <button type="button" className="ig-action-btn" onClick={handleBookmark}>
+              <i className={`bi ${isBookmarked ? 'bi-bookmark-fill' : 'bi-bookmark'} action-icon`}></i>
+            </button>
+            <div className="ig-ref-count">
+              <i className="bi bi-journals"></i>
+              <span>{refCount} ref{refCount !== 1 ? 's' : ''}</span>
             </div>
           </div>
         </div>
-      </div>
+      </article>
 
       <ConfirmModal {...modalProps} />
     </>

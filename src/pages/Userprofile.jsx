@@ -9,9 +9,9 @@ import { usePosts } from '../context/PostsContext';
 
 export default function UserProfile() {
   const { authorName } = useParams();
-  const navigate       = useNavigate();
-  const { user }       = useAuth();
-  const { allPosts, reactionCounts } = usePosts();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { allPosts } = usePosts();
 
   const decodedName = decodeURIComponent(authorName);
 
@@ -29,11 +29,11 @@ export default function UserProfile() {
   const authorInfo = authorPosts[0]?.author || { name: decodedName, avatar: null };
 
   const totalReactions = authorPosts.reduce((sum, p) =>
-    sum + (reactionCounts[p.id] !== undefined ? reactionCounts[p.id] : (p.likes || 0)), 0);
+    sum + (p.reactionCount ?? p.likes ?? 0), 0);
 
   const stats = [
-    { label: 'Posts',      value: authorPosts.length },
-    { label: 'Reactions',  value: totalReactions },
+    { label: 'Posts', value: authorPosts.length },
+    { label: 'Reactions', value: totalReactions },
     { label: 'Categories', value: [...new Set(authorPosts.map(p => p.category))].length },
   ];
 

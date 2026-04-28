@@ -17,7 +17,7 @@ const CATEGORY_ICONS = {
 export default function Sidebar({ selectedCategory, onCategoryChange }) {
   return (
     <aside className="sidebar">
-      <div style={{ marginBottom: '2rem' }}>
+      <div style={{ marginBottom: '2rem',paddingBottom: '2rem' , borderBottom: '1px solid var(--border)' }}>
         <p style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#dc3545', marginBottom: '0.75rem' }}>Navigation</p>
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
           <Link to="/" className="side-item"><i className="bi bi-house-fill"></i> Home</Link>
